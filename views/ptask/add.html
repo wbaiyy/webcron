@@ -1,0 +1,125 @@
+<div class="row">
+<div class="span12">      		
+	   		
+	<div class="widget ">
+		<div class="widget-header">
+			<i class="icon-plus"></i>
+ 			<h3>添加脚本</h3>
+		</div> <!-- /widget-header -->
+
+		<div class="widget-content">
+		
+		<div class="alert alert-danger hide" role="alert"></div>
+
+		<form id="add-task" action="{{urlfor "PTaskController.Add"}}" method="post" class="form-horizontal">
+			<fieldset>
+				<div class="control-group">
+					<label class="control-label" for="group_id">分组</label>
+					<div class="controls">
+						<select name="group_id" id="group_id">
+							<option value="0">未分组</option>
+							{{range $k, $v := .groups}}
+								<option value="{{$v.Id}}">{{$v.GroupName}}</option>
+							{{end}}
+						</select>
+					</div>
+				</div>
+				<div class="control-group">											
+					<label class="control-label" for="goreman_name">脚本名称</label>
+					<div class="controls">
+						<input type="text" name="goreman_name" class="span6" id="goreman_name">
+					</div>				
+				</div>
+				<div class="control-group">
+					<label class="control-label" for="goreman_command">命令脚本</label>
+					<div class="controls">
+						<textarea name="goreman_command" class="span6" id="goreman_command" rows="3"></textarea>
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+				<div class="control-group">
+					<label class="control-label" for="group_id">状态</label>
+					<div class="controls">
+						<select name="goreman_status" id="goreman_status">
+							<option value="1">可用</option>
+							<option value="2">关闭</option>
+						</select>
+					</div>
+				</div>
+				<div class="control-group">											
+					<label class="control-label" for="goreman_description">脚本说明</label>
+					<div class="controls">
+						<textarea name="goreman_description" class="span6" id="goreman_description" rows="3"></textarea>
+					</div> <!-- /controls -->				
+				</div> <!-- /control-group -->
+
+				<div class="control-group">
+					<label class="control-label" for="goreman_retry_times">失败重试次数</label>
+					<div class="controls">
+						<input type="text" name="goreman_retry_times" class="span1" id="goreman_retry_times" value="">
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+				<div class="control-group">
+					<label class="control-label" for="goreman_interval_time">重试间隔时间</label>
+					<div class="controls">
+						<input type="text" name="goreman_interval_time" class="span1" id="goreman_interval_time" value=""> 秒
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+
+				<div class="control-group">
+					<label class="control-label" for="goreman_num">进程个数</label>
+					<div class="controls">
+						<input type="text" name="goreman_num" class="span1" id="goreman_num" value="">
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+
+				<div class="control-group">
+					<label class="control-label" for="goreman_notify_user">任务结束通知人(工号)</label>
+					<div class="controls">
+						<input type="text" placeholder="多个用逗号隔开" name="goreman_notify_users" class="span6" id="goreman_notify_user" value="">
+					</div> <!-- /controls -->
+				</div> <!-- /control-group -->
+				<br />
+				<div class="control-group">
+					<label class="control-label" for="goreman_output_file">输出文件</label>
+					<div class="controls">
+						<input type="text" name="goreman_output_file" class="span6" id="goreman_output_file" value="{{.pTask.OutputFile}}">
+					</div> <!-- /controls -->
+				</div>
+
+				<div class="form-actions">
+					<button type="submit" class="btn btn-primary">保 存</button> 
+					<a href="{{urlfor "PTaskController.List"  "page" .pageNo "command" .command}}" class="btn">返 回</a>
+				</div> <!-- /form-actions -->
+			</fieldset>
+		</form>
+
+		</div>
+	</div>
+</div>
+</div>
+
+<script>
+$(function () {
+	$("form").submit(function () {
+		$(".alert").hide();
+		$("button[type='submit']").attr('disabled', true);
+		$.post('{{urlfor "PTaskController.Add"}}', $(this).serialize(), function (out) {
+			if (out.status == 0) {
+				window.location.href = '{{urlfor "PTaskController.List" "page" .pageNo "command" .command}}';
+			} else {
+				$(".alert").text(out.msg);
+				$(".alert").show();
+				$("button[type='submit']").attr('disabled', false);
+			}
+		}, "json");
+		return false;
+	});
+	$("input[name='notify']").click(function () {
+		if ($(this).val() > 0) {
+			$('.notify_email').removeClass('hide');
+		} else {
+			$('.notify_email').addClass('hide');
+		}
+	});
+});
+</script>
