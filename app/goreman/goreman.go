@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/astaxie/beego"
-	"github.com/wbaiyy/goreman"
 	"github.com/wbaiyy/webcron-source/app/models"
 	"os"
 	"regexp"
@@ -123,7 +122,7 @@ func RunOpt(cmd string, args ...string) error{
 		optCmd = cmd
 	}
 
-	err := RpcRun(optCmd, args, goreman.DefaultPort())
+	err := RpcRun(optCmd, args, DefaultPort())
 	if err == nil {
 		switch cmd {
 		case "person-start":
