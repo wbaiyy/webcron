@@ -3,7 +3,7 @@ package goreman
 import (
 	"fmt"
 	"time"
-	"webcron-source/app/models"
+	"github.com/wbaiyy/webcron-source/app/models"
 )
 var retryChans map[string]chan bool
 

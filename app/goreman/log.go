@@ -9,7 +9,7 @@ import (
 	"os"
 	"sync"
 	"time"
-	"webcron-source/app/libs"
+	"github.com/wbaiyy/webcron-source/app/libs"
 )
 
 type clogger struct {

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/wbaiyy/goreman"
-	"webcron-source/app/models"
+	"github.com/wbaiyy/webcron-source/app/models"
 	"os"
 	"regexp"
 	"strconv"

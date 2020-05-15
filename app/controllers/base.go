@@ -5,8 +5,8 @@ import (
 	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
-	"webcron-source/app/libs"
-	"webcron-source/app/models"
+	"github.com/wbaiyy/webcron-source/app/libs"
+	"github.com/wbaiyy/webcron-source/app/models"
 )
 
 const (
