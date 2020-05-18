@@ -3,10 +3,10 @@ package controllers
 import (
 	"encoding/base64"
 	"github.com/astaxie/beego"
-	"strconv"
-	"strings"
 	"github.com/wbaiyy/webcron-source/app/libs"
 	"github.com/wbaiyy/webcron-source/app/models"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -92,11 +92,10 @@ func (this *BaseController) auth() {
 
 	if this.userId == 0 && (this.controllerName != "main" ||
 		(this.controllerName == "main" && this.actionName != "logout" && this.actionName != "login")) {
-		this.Ctx.SetCookie("auth", "")
-		ssoLogoutUrl := this.getSsoUrl("login/index/loginout",
-			map[string]string{"returnurl" : base64.StdEncoding.EncodeToString([]byte(this.getHost() + beego.URLFor("MainController.Login")))})
-		this.redirect(ssoLogoutUrl)
-		//this.redirect(beego.URLFor("MainController.Login"))
+		//ssoLogoutUrl := this.getSsoUrl("login/index/loginout",
+		//	map[string]string{"returnurl" : base64.StdEncoding.EncodeToString([]byte(this.getHost() + beego.URLFor("MainController.Login")))})
+		//this.redirect(ssoLogoutUrl)
+		this.redirect(beego.URLFor("MainController.Login"))
 	}
 }
 

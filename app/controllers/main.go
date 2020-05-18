@@ -6,14 +6,14 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/httplib"
 	"github.com/astaxie/beego/utils"
+	"github.com/wbaiyy/webcron-source/app/jobs"
+	"github.com/wbaiyy/webcron-source/app/libs"
+	"github.com/wbaiyy/webcron-source/app/models"
 	"log"
 	"runtime"
 	"strconv"
 	"strings"
 	"time"
-	"github.com/wbaiyy/webcron-source/app/jobs"
-	"github.com/wbaiyy/webcron-source/app/libs"
-	"github.com/wbaiyy/webcron-source/app/models"
 )
 
 type SsoPerson struct {
@@ -198,7 +198,7 @@ func (this *MainController) Login() {
 				user.LastLogin = time.Now().Unix()
 				models.UserUpdate(user)
 
-				authkey := libs.Md5([]byte(this.getClientIp() + "|" + user.Password + user.Salt))
+				authkey := libs.GetCookieAuthKey(user.Password , user.Salt)
 				if remember == "yes" {
 					this.Ctx.SetCookie("auth", strconv.Itoa(user.Id)+"|"+authkey, 7*86400)
 				} else {
@@ -303,9 +303,10 @@ func (this *MainController) Login1() {
 // 退出登录
 func (this *MainController) Logout() {
 	this.Ctx.SetCookie("auth", "")
-	ssoLogoutUrl := this.getSsoUrl("login/index/loginout",
-		map[string]string{"returnurl" : base64.StdEncoding.EncodeToString([]byte(this.getHost() + beego.URLFor("MainController.Login")))})
-	this.redirect(ssoLogoutUrl)
+	//ssoLogoutUrl := this.getSsoUrl("login/index/loginout",
+	//	map[string]string{"returnurl" : base64.StdEncoding.EncodeToString([]byte(this.getHost() + beego.URLFor("MainController.Login")))})
+	//this.redirect(ssoLogoutUrl)
+	this.redirect("login")
 }
 
 // 获取系统时间
