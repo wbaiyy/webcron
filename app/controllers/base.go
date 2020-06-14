@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"encoding/base64"
 	"github.com/astaxie/beego"
 	"github.com/wbaiyy/webcron-source/app/libs"
 	"github.com/wbaiyy/webcron-source/app/models"
