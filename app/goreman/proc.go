@@ -62,6 +62,8 @@ func spawnProc(proc string, errCh chan<- procChan, logger *clogger) {
 		return
 	}
 
+	currentPid := cmd.Process.Pid
+
 	//procObj.Cmd = cmd
 	currentNum := len(procObj.CmdList)
 	procName := getProcName( proc, currentNum)
@@ -84,7 +86,7 @@ func spawnProc(proc string, errCh chan<- procChan, logger *clogger) {
 	//procObj.mu.Lock()
 
 	delete(procObj.CmdList, procName)
-	if len(procObj.CmdList) == 0 {
+	if procObj.IsCmdListEmpty() {
 		procStatusChan<- procStatus {
 			name: proc,
 			status:PROC_STATUS_NOT_START,
@@ -104,19 +106,22 @@ func spawnProc(proc string, errCh chan<- procChan, logger *clogger) {
 		}
 	} else {
 		status := "异常"
-		if procObj.IsStartSuccess {
-			status = "正常"
+		if procObj.IsStartSuccess || procObj.RunStatus == PROC_STATUS_START_STOPPED {
+		} else {
+			errCh <- procChan{
+				err: errors.New(fmt.Sprintf("进程主动退出,持续时间：%v，状态【%s】", elapsed, status)),
+				name:proc,
+				bufErr:"",
+			}
 		}
-		errCh <- procChan{
-			err: errors.New(fmt.Sprintf("进程主动退出,持续时间：%v，状态【%s】", elapsed, status)),
-			name:proc,
-			bufErr:"",
-		}
+
 	}
 	procObj.waitErr = err
+	fmt.Fprintf(logger, "任务【%s】-进程【%d】已停止\n", proc, currentPid)
+	if procObj.IsCmdListEmpty() {
+		logger.loggerDone <- true
+	}
 
-	fmt.Fprintf(logger, "Terminating %s\n", proc)
-	logger.loggerDone <- true
 }
 
 // Stop the specified proc, issuing os.Kill if it does not terminate within 10
@@ -133,10 +138,12 @@ func stopProc(proc string, signal os.Signal) error {
 	p.mu.Lock()
 	defer p.mu.Unlock()
 
-	if len(p.CmdList) == 0 {
+	if p.IsCmdListEmpty() {
 		return nil
 	}
 	p.stoppedBySupervisor = true
+
+	p.RunStatus = PROC_STATUS_START_STOPPED
 
 	err := terminateProc(proc, signal)
 	if err != nil {

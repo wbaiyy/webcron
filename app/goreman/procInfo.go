@@ -10,6 +10,7 @@ const (
 	PROC_STATUS_NOT_START = 1
 	PROC_STATUS_RUNNING = 2
 	PROC_STATUS_STOPPED = 3
+	PROC_STATUS_START_STOPPED = 4
 )
 
 var colorIndex int
@@ -44,6 +45,12 @@ type ProcInfo struct {
 	IsStartSuccess bool
 	Num int  //启动数量
 }
+
+//判断当前的任务的进程列表是否为空
+func (p *ProcInfo) IsCmdListEmpty() bool {
+	return 0 == len(p.CmdList)
+}
+
 
 
 func NewProc(pTaslModel *models.PTask) *ProcInfo {
