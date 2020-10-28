@@ -5,7 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"html/template"
 	"net/http"
-	"github.com/wbaiyy/webcron-source/app/controllers"
+	"webcron/app/controllers"
 )
 
 const VERSION = "1.0.0"

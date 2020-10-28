@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/astaxie/beego"
-	"github.com/wbaiyy/webcron-source/app/models"
+	"webcron/app/models"
 	"os"
 	"regexp"
 	"strconv"

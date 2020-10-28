@@ -5,9 +5,9 @@ import (
 	"github.com/astaxie/beego"
 	"strconv"
 	"time"
-	"github.com/wbaiyy/webcron-source/app/goreman"
-	"github.com/wbaiyy/webcron-source/app/libs"
-	"github.com/wbaiyy/webcron-source/app/models"
+	"webcron/app/goreman"
+	"webcron/app/libs"
+	"webcron/app/models"
 )
 
 type PTaskController struct {

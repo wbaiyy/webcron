@@ -6,11 +6,11 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/wbaiyy/webcron-source/app/goreman"
-	"github.com/wbaiyy/webcron-source/app/http"
-	"github.com/wbaiyy/webcron-source/app/jobs"
-	_ "github.com/wbaiyy/webcron-source/app/mail"
-	"github.com/wbaiyy/webcron-source/app/models"
+	"webcron/app/goreman"
+	"webcron/app/http"
+	"webcron/app/jobs"
+	_ "webcron/app/mail"
+	"webcron/app/models"
 )
 
 func main() {

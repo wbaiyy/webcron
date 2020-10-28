@@ -5,12 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	"github.com/wbaiyy/webcron-source/app/libs"
-	"github.com/wbaiyy/webcron-source/app/models"
 	"os"
 	"os/exec"
 	"sync"
 	"time"
+	"webcron/app/models"
 )
 
 var IsEnd bool
@@ -84,7 +83,7 @@ func spawnProc(proc string, errCh chan<- procChan, logger *clogger) {
 
 	//procObj.mu.Lock()
 
-	delete(procObj.CmdList, procName);
+	delete(procObj.CmdList, procName)
 	if len(procObj.CmdList) == 0 {
 		procStatusChan<- procStatus {
 			name: proc,
@@ -104,8 +103,12 @@ func spawnProc(proc string, errCh chan<- procChan, logger *clogger) {
 		default:
 		}
 	} else {
+		status := "异常"
+		if procObj.IsStartSuccess {
+			status = "正常"
+		}
 		errCh <- procChan{
-			err: errors.New(fmt.Sprintf("进程主动退出,持续时间：%v", elapsed)),
+			err: errors.New(fmt.Sprintf("进程主动退出,持续时间：%v，状态【%s】", elapsed, status)),
 			name:proc,
 			bufErr:"",
 		}
@@ -192,25 +195,11 @@ func startProc(proc string, wg *sync.WaitGroup, errCh chan<- procChan, isRetry b
 			}
 		} else {
 			//p.mu.Unlock()
-			//todo vv或邮件通知
+			//todo 邮件通知
 			msg := fmt.Sprintf("【任务进程-%s】任务已停止，已经达到最大重启次数:%d", proc, procs[proc].MaxRetryTimes)
-			if procs[proc].NotifyUser != "" {
-				msgCenter := libs.NewMsgCenterService()
-				sendMapper := make(map[string]string)
-				sendMapper["vv"] = procs[proc].NotifyUser
-				err := msgCenter.Send("常驻任务系统", msg, sendMapper)
-				if err != nil {
-					msg  += err.Error()
-					return errors.New(msg)
-				}
-			}
 
 			return errors.New(msg)
 		}
-	}
-
-	if wg != nil {
-		wg.Add(1)
 	}
 
 	procObj := procs[proc]
@@ -222,6 +211,9 @@ func startProc(proc string, wg *sync.WaitGroup, errCh chan<- procChan, isRetry b
 
 	num := procObj.Num - len(procObj.CmdList)
 	for i := num; i > 0 ;i-- {
+		if wg != nil {
+			wg.Add(1)
+		}
 		go func() {
 			spawnProc(proc, errCh, logger)
 			if wg != nil {

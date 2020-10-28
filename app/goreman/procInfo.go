@@ -1,7 +1,7 @@
 package goreman
 
 import (
-	"github.com/wbaiyy/webcron-source/app/models"
+	"webcron/app/models"
 	"os/exec"
 	"sync"
 )
