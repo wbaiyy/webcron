@@ -150,7 +150,7 @@ func (r *Goreman) Update(args []string, ret *string) (err error) {
 	return err
 }
 
-func(r *Goreman)chanNotifyMethod(name string, args []string, ret *string) (err error) {
+func(r *Goreman) chanNotifyMethod(name string, args []string, ret *string) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = r.(error)
