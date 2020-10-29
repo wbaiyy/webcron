@@ -51,15 +51,15 @@
 						<thead>
 						<tr>
 							<th width="20"><input type="checkbox" name="chkall" value="1"></td>
-							<th>ID</th>
-							<th>名称</th>
+							<th width="30">ID</th>
+							<th class="span2">名称</th>
 							<th class="span3">命令</th>
-							<th>状态</th>
+							<th class="span1">状态</th>
 							<th>重试次数</th>
-							<th>当前重试次数</th>
-							<th >重试间隔时间</th>
-							<th >运行状态</th>
-							<th class="span4">操作</th>
+							<th>已重试次数</th>
+							<th>重试间隔(秒)</th>
+							<th>运行状态</th>
+							<th class="span3">操作</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -100,7 +100,7 @@
 										<span class="icon-pencil icon-white"></span> 编辑
 									</a>
 									<a class="btn btn-info" href="{{urlfor "PTaskController.FailLogs" "pageNo" $v.pageNoParam "command" $v.commandParam}}&id={{$v.id}}">
-										<span class="icon-log icon-white"></span> 失败日志
+										<span class="icon-log icon-white"></span> 日志
 									</a>
 								</td>
 							</tr>
